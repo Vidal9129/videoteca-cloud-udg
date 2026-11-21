@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo Multimedia Cloud - Sala de Exhibición</title>
+    <!-- Bootstrap 5 CDN para diseño 100% responsivo -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0f2f5;
+        }
+        .hero-header {
+            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+            color: white;
+            padding: 2.5rem 1rem;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .card-recurso {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: none;
+            border-radius: 12px;
+        }
+        .card-recurso:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Encabezado Responsivo -->
+    <header class="hero-header text-center mb-4">
+        <div class="container">
+            <h1 class="fw-bold">☁️ Repositorio Digital en la Nube</h1>
+            <p class="lead mb-0">Gestión dinámica de medios digitales alojados en plataformas externas</p>
+        </div>
+    </header>
+
+    <main class="container mb-5">
+        <div class="row g-4">
+            
+            <!-- Formulario Responsivo (Columna izquierda en PC, arriba en móvil) -->
+            <div class="col-12 col-lg-4">
+                <div class="card shadow-sm border-0 rounded-4 p-4">
+                    <h4 class="fw-bold text-primary mb-3">➕ Registrar Medio Digital</h4>
+                    <form action="/agregar" method="POST">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Título del Recurso</label>
+                            <input type="text" name="titulo" class="form-control" placeholder="Ej. Clase de Redes Cloud" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Servicio Cloud de Origen</label>
+                            <select name="plataforma" class="form-select" required>
+                                <option value="YouTube (Streaming Cloud)">YouTube (Video Streaming)</option>
+                                <option value="Google Drive (Cloud Storage)">Google Drive (Documentos/Archivos)</option>
+                                <option value="OneDrive / Dropbox">OneDrive / Dropbox</option>
+                                <option value="Spotify / SoundCloud">Spotify / Audio Cloud</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Enlace al Medio Digital (URL)</label>
+                            <input type="url" name="url_medio" class="form-control" placeholder="https://..." required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Descripción breve</label>
+                            <textarea name="descripcion" class="form-control" rows="2" placeholder="Describe el contenido..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 fw-bold py-2">Guardar en Base de Datos</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Lista de Medios desde la Base de Datos (Columna derecha en PC, abajo en móvil) -->
+            <div class="col-12 col-lg-8">
+                <h4 class="fw-bold text-dark mb-3">📂 Medios Almacenados en Base de Datos</h4>
+                <div class="row row-cols-1 row-cols-md-2 g-3">
+                    {% for r in recursos %}
+                    <div class="col">
+                        <div class="card h-100 card-recurso shadow-sm p-3">
+                            <div class="card-body d-flex flex-column">
+                                <span class="badge bg-info text-dark align-self-start mb-2">{{ r.plataforma }}</span>
+                                <h5 class="card-title fw-bold">{{ r.titulo }}</h5>
+                                <p class="card-text text-muted small flex-grow-1">{{ r.descripcion }}</p>
+                                <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+                                    <a href="{{ r.url_medio }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-primary fw-semibold">
+                                        🔗 Abrir Medio Externo
+                                    </a>
+                                    <form action="/eliminar/{{ r.id }}" method="POST" class="m-0">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Eliminar este recurso de la base de datos?')">
+                                            🗑️
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer Responsivo -->
+    <footer class="bg-dark text-white text-center py-3 mt-auto">
+        <div class="container">
+            <small>Producto Integrador Final - Computación en la Nube | Universidad de Guadalajara</small>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
